@@ -2,22 +2,40 @@ import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
-import ConfettiCannon from 'react-native-confetti-cannon'
+import ConfettiCannon from 'react-native-confetti-cannon';
+import { Picker } from '@react-native-picker/picker';
 
-const cards = [
-"⚽️",
-"🏀",
-"🏈",
-"⚾️",
-"🥎",
-"🏐",
-/* "🎱",
-"🥊",
-"🏓", */
+const cardsEasy = [
+  "⚽️",
+  "🏀",
+  "🏈",
+];
 
-/* "🏑",
-"🎾",
-"🥌", */   
+const cardsMedium = [
+  "⚽️",
+  "🏀",
+  "🏈",
+  "⚾️",
+  "🥎",
+  "🏐",
+  /* "🎱",
+  "🥊",
+  "🏓", */   
+];
+
+const cardsHard = [
+  "⚽️",
+  "🏀",
+  "🏈",
+  "⚾️",
+  "🥎",
+  "🏐",
+  "🎱",
+  "🥊",
+  "🏓",
+  /* "🏑",
+  "🎾",
+  "🥌", */   
 ];
 
 //funcion para desordenar/revolver las tarjetas - random
@@ -33,10 +51,11 @@ function shuffle(array) {
 export default function App() {
 
   //la card tiene que estar duplicada para poder encontrar la igual
-  const [board, setBoard] = React.useState(() => shuffle([...cards, ...cards]));
+  const [board, setBoard] = React.useState(() => shuffle([...cardsEasy, ...cardsEasy]));
   const [selectedCards, setSelectedCards] = React.useState([]);
   const [matchedCards, setMatchedCards] = React.useState([]);
   const [score, setScore] = React.useState(0);
+  const [level, setLevel] = React.useState('Easy');
 
   React.useEffect(() => {
     if (selectedCards.length < 2) return;
@@ -51,6 +70,24 @@ export default function App() {
     }
   }, [selectedCards]);
 
+  function changeLevel(itemValue) {
+    if(itemValue === 'Easy') {
+      setBoard(() => shuffle([...cardsEasy, ...cardsEasy]));
+      setLevel(itemValue);
+      resetGame();
+    }
+    if(itemValue === 'Medium') {
+      setBoard(() => shuffle([...cardsMedium, ...cardsMedium]));
+      setLevel(itemValue);
+      resetGame();
+    }
+    if(itemValue === 'Hard') {
+      setBoard(() => shuffle([...cardsHard, ...cardsHard]));
+      setLevel(itemValue);
+      resetGame();
+    }
+  };
+
   const handleTapCard = (index) => {
     if (selectedCards.length >= 2 || selectedCards.includes(index)) return;
     setSelectedCards([...selectedCards, index]);
@@ -64,7 +101,7 @@ export default function App() {
     setScore(0);
     setSelectedCards([]);
   };
-
+  
   return (
     <View style={styles.container}>
       {didPlayerWin() ? <ConfettiCannon count={50} origin={{x: -10, y: 0}} /> : null}
@@ -72,6 +109,16 @@ export default function App() {
         {didPlayerWin() ? "Congratulations 🏆" : "Memory Game"}
       </Text>
       <Text style={styles.title}>Score: {score}</Text>
+      <Picker
+        style={styles.input}
+        dropdownIconColor='white'
+        selectedValue={level}
+        onValueChange={(itemValue) => changeLevel(itemValue)}
+      >
+        <Picker.Item label="Easy" value="Easy" />
+        <Picker.Item label="Medium" value="Medium" />
+        <Picker.Item label="Hard" value="Hard" /> 
+      </Picker>
       <View style={styles.board}>
         {board.map((card, index) => {
           const isTurnedOver = 
@@ -99,9 +146,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 22,
     color: "white",
     fontWeight: "900",
+  },
+  input: {
+    width: '36%',
+    fontSize: 32,
+    fontWeight: '900',
+    color: 'white',
+    //padding: 13,
+    /* marginVertical: 2,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 6 */
   },
   board: {
     flexDirection: "row",
