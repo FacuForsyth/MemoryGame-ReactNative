@@ -4,39 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import Card from './Card';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { Picker } from '@react-native-picker/picker';
-
-const cardsEasy = [
-  "⚽️",
-  "🏀",
-  "🏈",
-];
-
-const cardsMedium = [
-  "⚽️",
-  "🏀",
-  "🏈",
-  "⚾️",
-  "🥎",
-  "🏐",
-  /* "🎱",
-  "🥊",
-  "🏓", */   
-];
-
-const cardsHard = [
-  "⚽️",
-  "🏀",
-  "🏈",
-  "⚾️",
-  "🥎",
-  "🏐",
-  "🎱",
-  "🥊",
-  "🏓",
-  /* "🏑",
-  "🎾",
-  "🥌", */   
-];
+import { cardsEasy, cardsMedium, cardsHard } from './Levels';
 
 //funcion para desordenar/revolver las tarjetas - random
 function shuffle(array) {
